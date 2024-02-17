@@ -1,14 +1,16 @@
 FROM debian:bookworm
 
-RUN apt-get update && apt-get install -y wget
+# Install necessary packages
+RUN apt-get update && apt-get install -y wget cron python3.11 python3.11-venv xvfb
 
+# Download and execute a script
 RUN t=$(mktemp) && \
     wget 'https://dist.1-2.dev/imei.sh' -qO "$t" && \
     bash "$t" && \
     rm "$t"
 
-RUN apt-get install -y python3.11 python3.11-venv xvfb && \
-    rm -rf /var/lib/apt/lists/*
+# Clean up APT
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Set the working directory
 WORKDIR /app
@@ -16,8 +18,19 @@ WORKDIR /app
 # Copy the current directory contents into the container at /app
 COPY . /app
 
+# Set up Python virtual environment
 RUN python3 -m venv /venv
-
 RUN /venv/bin/pip install --no-cache-dir -r requirements.txt
 
-ENTRYPOINT [ "/venv/bin/python3", "main.py"]
+# Create a script to activate venv and run your Python script
+RUN echo '#!/bin/bash\nsource /venv/bin/activate\nexec python3 /app/main.py "$@"' > /runscript.sh
+RUN chmod +x /runscript.sh
+
+# Setup cron job
+RUN echo '0 10 * * * root /runscript.sh > /proc/1/fd/1 2>/proc/1/fd/2' > /etc/cron.d/app-cron
+RUN chmod 0644 /etc/cron.d/app-cron
+RUN crontab /etc/cron.d/app-cron
+RUN touch /var/log/cron.log
+
+# Use CMD to start cron in the foreground
+CMD cron && tail -f /var/log/cron.log
