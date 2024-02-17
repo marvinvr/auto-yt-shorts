@@ -1,0 +1,12 @@
+mypy
+openai
+python-dotenv
+requests
+pathlib
+moviepy
+pillow
+scipy
+opencv-python
+assemblyai
+srt_equalizer
+tqdm

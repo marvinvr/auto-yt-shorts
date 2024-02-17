@@ -1,0 +1,11 @@
+version: "3.8"
+services:
+  auto-yt-shorts:
+    container_name: auto-yt-shorts
+    build: .
+    volumes:
+      - ./youtube:/app/youtube
+      - ./secondary_video:/app/secondary_video
+      - ./music:/app/music
+    env_file:
+      - .env
