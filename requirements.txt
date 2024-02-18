@@ -10,3 +10,5 @@ opencv-python
 assemblyai
 srt_equalizer
 tqdm
+fastapi
+uvicorn

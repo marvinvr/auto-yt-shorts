@@ -2,6 +2,8 @@ import logging
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from multiprocessing import cpu_count
 
+import uvicorn
+from fastapi import FastAPI
 from tqdm import tqdm
 
 from utils.audio import generate_voiceover
@@ -17,6 +19,8 @@ from utils.metadata import save_metadata
 from utils.stock_videos import get_stock_videos
 from utils.video import generate_subtitles, generate_video
 from utils.yt import prep_for_manual_upload
+
+app = FastAPI()
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -53,7 +57,8 @@ def generate_video_data(title):
     return title, description, script, search_terms, video
 
 
-def generate_videos(n: int = 1) -> None:
+@app.post("/generate_videos/")
+def generate_videos(n: int = 4) -> None:
     topic = get_topic()
 
     logger.info("[Generated Topic]")
@@ -86,4 +91,4 @@ def generate_videos(n: int = 1) -> None:
 
 
 if __name__ == "__main__":
-    generate_videos(4)
+    uvicorn.run(app, host="0.0.0.0", port=8000)
