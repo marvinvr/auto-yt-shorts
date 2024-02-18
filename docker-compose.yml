@@ -1,6 +1,7 @@
 version: "3.8"
 services:
   auto-yt-shorts:
+    platform: linux/x86_64
     container_name: auto-yt-shorts
     build: .
     volumes:
