@@ -58,7 +58,7 @@ def generate_video_data(title):
 
 
 @app.post("/generate_videos/")
-def generate_videos(n: int = 4) -> None:
+def generate_videos(n: int = 1) -> None:
     topic = get_topic()
 
     logger.info("[Generated Topic]")
