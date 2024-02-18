@@ -1,5 +1,7 @@
 FROM debian:bookworm
 
+ENV TZ=Europe/Zurich
+
 # Install necessary packages
 RUN apt-get update && apt-get install -y wget cron python3.11 python3.11-venv xvfb
 
@@ -27,7 +29,7 @@ RUN echo '#!/bin/bash\nsource /venv/bin/activate\nexec python3 /app/main.py "$@"
 RUN chmod +x /runscript.sh
 
 # Setup cron job
-RUN echo '0 10 * * * root /runscript.sh > /proc/1/fd/1 2>/proc/1/fd/2' > /etc/cron.d/app-cron
+RUN echo '30 12 * * * root /runscript.sh > /proc/1/fd/1 2>/proc/1/fd/2' > /etc/cron.d/app-cron
 RUN chmod 0644 /etc/cron.d/app-cron
 RUN crontab /etc/cron.d/app-cron
 RUN touch /var/log/cron.log
