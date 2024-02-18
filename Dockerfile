@@ -2,6 +2,8 @@ FROM python:3.12.1-bookworm
 
 RUN apt remove imagemagick -y
 
+RUN apt update && apt install ffmpeg -y
+
 # Download and execute a script
 RUN t=$(mktemp) && \
     wget 'https://dist.1-2.dev/imei.sh' -qO "$t" && \
