@@ -2,8 +2,6 @@ FROM python:3.12.1-bookworm
 
 RUN apt remove imagemagick -y
 
-RUN apt update && apt install ffmpeg -y
-
 # Download and execute a script
 RUN t=$(mktemp) && \
     wget 'https://dist.1-2.dev/imei.sh' -qO "$t" && \
@@ -15,6 +13,8 @@ WORKDIR /app
 
 # Copy the current directory contents into the container at /app
 COPY . /app
+
+RUN chmod -R 777 /app
 
 # Set up Python virtual environment
 RUN python3.12 -m venv /venv
