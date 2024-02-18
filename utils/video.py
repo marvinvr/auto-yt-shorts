@@ -78,7 +78,11 @@ def combine_videos(video_paths: List[Path], max_duration: int) -> Path:
 
     final_clip = concatenate_videoclips(clips)
     final_clip = final_clip.set_fps(30)
-    final_clip.write_videofile(str(combined_video_path), threads=os.cpu_count())
+    final_clip.write_videofile(
+        str(combined_video_path),
+        threads=os.cpu_count(),
+        temp_audiofile=str(TEMP_PATH / f"{video_id}.mp3"),
+    )
 
     return combined_video_path
 
@@ -134,7 +138,11 @@ def generate_video(
 
     output_video_path = OUTPUT_PATH / f"{video_id}.mp4"
 
-    result.write_videofile(str(output_video_path), threads=os.cpu_count())
+    result.write_videofile(
+        str(output_video_path),
+        threads=os.cpu_count(),
+        temp_audiofile=str(TEMP_PATH / f"{video_id}.mp3"),
+    )
 
     return output_video_path
 
