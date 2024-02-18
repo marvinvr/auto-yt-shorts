@@ -51,10 +51,7 @@ def generate_video_data(title):
     subtitles = generate_subtitles(voiceover)
     logger.info("[Generated Subtitles]")
 
-    video = generate_video(stock_videos, voiceover, subtitles)
-    logger.info("[Generated Video]")
-
-    return title, description, script, search_terms, video
+    return title, description, script, search_terms, stock_videos, voiceover, subtitles
 
 
 @app.post("/generate_videos/")
@@ -77,17 +74,22 @@ def generate_videos(n: int = 4) -> None:
             executor.submit(generate_video_data, title): title for title in titles
         }
 
-        for future in tqdm(as_completed(future_to_title), total=len(titles)):
-            title, description, script, search_terms, video = future.result()
+    for future in tqdm(as_completed(future_to_title), total=len(titles)):
+        title, description, script, search_terms, stock_videos, voiceover, subtitles = (
+            future.result()
+        )
 
-            save_metadata(title, description, None, script, search_terms, video)
-            logger.info("[Saved Video]")
+        video = generate_video(stock_videos, voiceover, subtitles)
+        logger.info("[Generated Video]")
 
-            # upload_tiktok(video, description)
-            # upload_yt(video, title, description)
+        save_metadata(title, description, None, script, search_terms, video)
+        logger.info("[Saved Video]")
 
-            prep_for_manual_upload(video, title, description)
-            logger.info("[Uploaded Video]")
+        # upload_tiktok(video, description)
+        # upload_yt(video, title, description)
+
+        prep_for_manual_upload(video, title, description)
+        logger.info("[Uploaded Video]")
 
 
 @app.get("/health/")
