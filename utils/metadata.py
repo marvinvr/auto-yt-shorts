@@ -27,9 +27,9 @@ def save_metadata(
 
     os.system(f"mkdir -p {str(OUTPUT_PATH / today)}")
 
-    new_video_file = Path("youtube") / f"{today}" / f"{title}.mp4"
+    new_video_file = OUTPUT_PATH / f"{today}" / f"{title}.mp4"
 
     os.system(f'mv {str(video_path)} "{new_video_file}"')
 
-    with open(OUTPUT_PATH / today / f"{title}.json", "w") as f:
+    with open(OUTPUT_PATH / f"{today}" / f"{title}.json", "w") as f:
         json.dump(metadata, f)

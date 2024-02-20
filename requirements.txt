@@ -12,3 +12,4 @@ tqdm==4.66.1
 fastapi==0.109.2
 uvicorn==0.27.1
 google-api-python-client==2.116.0
+httplib2==0.22.0
