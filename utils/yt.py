@@ -2,10 +2,6 @@ import os
 from datetime import datetime
 from pathlib import Path
 
-from apiclient.errors import HttpError
-
-from upload_video import get_authenticated_service, initialize_upload
-
 
 def auto_upload(
     video: Path,
@@ -14,19 +10,9 @@ def auto_upload(
     privacy: str = "public",
     category: str = "24",
 ) -> None:
-    args = {
-        "file": str(video),
-        "title": title,
-        "description": description,
-        "category": category,
-        "privacyStatus": privacy,
-    }
-
-    youtube = get_authenticated_service(args)
-    try:
-        initialize_upload(youtube, args)
-    except HttpError as e:
-        print("An HTTP error %d occurred:\n%s" % (e.resp.status, e.content))
+    os.system(
+        f'/venv/bin/python3 upload_video.py --file="{str(video)}" --title="{title}" --description="{description}" --privacyStatus="{privacy}" --category="{category}"'
+    )
 
 
 def prep_for_manual_upload(
