@@ -82,10 +82,12 @@ def generate_videos(n: int = 1) -> None:
         video = generate_video(stock_videos, voiceover, subtitles)
         logger.info("[Generated Video]")
 
-        save_metadata(title, description, None, script, search_terms, video)
+        new_video_file = save_metadata(
+            title, description, None, script, search_terms, video
+        )
         logger.info("[Saved Video]")
 
-        auto_upload(video, title, description)
+        auto_upload(new_video_file, title, description)
         logger.info("[Uploaded Video]")
 
 

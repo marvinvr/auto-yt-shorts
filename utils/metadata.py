@@ -14,7 +14,7 @@ def save_metadata(
     script: str,
     search_terms: List[str],
     video_path: Path,
-) -> None:
+) -> Path:
     metadata = {
         "title": title,
         "description": description,
@@ -33,3 +33,5 @@ def save_metadata(
 
     with open(OUTPUT_PATH / f"{today}" / f"{title}.json", "w") as f:
         json.dump(metadata, f)
+
+    return new_video_file
