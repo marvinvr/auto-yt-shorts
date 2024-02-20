@@ -18,7 +18,7 @@ from utils.llm import (
 from utils.metadata import save_metadata
 from utils.stock_videos import get_stock_videos
 from utils.video import generate_subtitles, generate_video
-from utils.yt import prep_for_manual_upload
+from utils.yt import auto_upload, prep_for_manual_upload
 
 app = FastAPI()
 
@@ -55,7 +55,7 @@ def generate_video_data(title):
 
 
 @app.post("/generate_videos/")
-def generate_videos(n: int = 4) -> None:
+def generate_videos(n: int = 1) -> None:
     topic = get_topic()
 
     logger.info("[Generated Topic]")
@@ -85,10 +85,7 @@ def generate_videos(n: int = 4) -> None:
         save_metadata(title, description, None, script, search_terms, video)
         logger.info("[Saved Video]")
 
-        # upload_tiktok(video, description)
-        # upload_yt(video, title, description)
-
-        prep_for_manual_upload(video, title, description)
+        auto_upload(video, title, description)
         logger.info("[Uploaded Video]")
 
 

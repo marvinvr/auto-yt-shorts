@@ -220,3 +220,5 @@ secondary_video
 music
 youtube
 /test.py
+client_secrets.json
+upload_video.py-oauth2.json

@@ -3,13 +3,16 @@ from datetime import datetime
 from pathlib import Path
 
 
-def upload_yt(
-    file: str,
-    metadata_path: str,
-) -> str:
-
-    #    res = YouTubeUploader(file, metadata_path).upload()
-    ...
+def auto_upload(
+    video: Path,
+    title: str,
+    description: str,
+    privacy: str = "public",
+    category: str = "24",
+) -> None:
+    os.system(
+        f'python upload_video.py --file="{str(video)}" --title="{title}" --description="{description}" --privacyStatus="{privacy}" --category="{category}"'
+    )
 
 
 def prep_for_manual_upload(

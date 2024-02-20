@@ -147,7 +147,7 @@ Respond with JSON in the following format:
         titles[i] for i in most_engaging_titles if i < len(titles) and titles[i]
     ]
 
-    return sorted_titles[:n]
+    return random.choices(sorted_titles[: max(len(titles) // 2, n)], k=n)
 
 
 def get_best_title(titles: List[str]) -> str:
