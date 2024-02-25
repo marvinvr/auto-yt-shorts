@@ -11,6 +11,26 @@ POSSIBLE_TOPICS = [
     # "Bold Predictions",
     "Controversial Actions by Celebrities",
     "Controversial Actions by Well Known Companies",
+  "Science Facts",
+  "Historical Mysteries Solved",
+  "Tech Milestones",
+  "Cultural Oddities",
+  "Animal Superpowers",
+  "Psychological Phenomena",
+  "Extreme Weather Events",
+  "Unsung Heroes of History",
+  "Futuristic Technologies in Development",
+  "Mythical Places and Their Real Inspirations",
+  "Space Exploration Milestones",
+  "Microscopic Worlds",
+  "Cryptocurrency and Blockchain",
+  "The Science of Happiness",
+  "Bizarre Laws from Around the World",
+  "Hidden Gems of the Planet",
+  "Secrets of Successful People",
+  "Eco-Friendly Innovations",
+  "Mysteries of the Deep Sea",
+  "World Records and the Stories Behind Them"
 ]
 
 
