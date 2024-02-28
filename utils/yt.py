@@ -11,7 +11,7 @@ def auto_upload(
     category: str = "24",
 ) -> None:
     os.system(
-        f'/venv/bin/python3 upload_video.py --file="{str(video)}" --title="{title}" --description="{description}" --privacyStatus="{privacy}" --category="{category}" --noauth_local_webserver'
+        f'/venv/bin/python3 upload_video.py --file="{str(video)}" --title="{title}" --description="{description}" --privacyStatus="{privacy}" --category="{category}"'
     )
 
 
