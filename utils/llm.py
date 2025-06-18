@@ -1,13 +1,28 @@
 import json
+import logging
 import random
 from typing import List
 
 import requests
 from openai import OpenAI
 
-from config import NEWS_API_KEY, OPENAI_API_KEY, OPENAI_MODEL, POSSIBLE_TOPICS
+from config import (
+    NEWS_API_KEY,
+    OPENAI_API_KEY,
+    OPENAI_BASE_URL,
+    OPENAI_MODEL,
+    POSSIBLE_TOPICS,
+)
 
-client = OpenAI(api_key=OPENAI_API_KEY)
+logger = logging.getLogger(__name__)
+
+# Initialize OpenAI client with optional base URL
+client_kwargs = {"api_key": OPENAI_API_KEY}
+if OPENAI_BASE_URL:
+    logger.info(f"Using OpenAI base URL: {OPENAI_BASE_URL}")
+    client_kwargs["base_url"] = OPENAI_BASE_URL
+
+client = OpenAI(**client_kwargs)
 
 _base_prompt = """
 You are a passionate Tiktok creator and you want to create more short form content. Your videos contain a voiceover, stock footage and subtitles. 

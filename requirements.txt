@@ -1,4 +1,4 @@
-openai==1.11.0
+openai==1.88.0
 python-dotenv==0.21.0
 requests==2.31.0
 pathlib==1.0.1
@@ -9,8 +9,8 @@ opencv-python==4.9.0.80
 assemblyai==0.20.2
 srt_equalizer==0.1.8
 tqdm==4.66.1
-fastapi==0.109.2
-uvicorn==0.27.1
+apscheduler==3.10.4
+apprise==1.7.1
 google-api-python-client==2.116.0
 httplib2==0.22.0
 oauth2client==4.1.3

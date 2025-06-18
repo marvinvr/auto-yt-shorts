@@ -27,6 +27,8 @@ def save_metadata(
 
     os.system(f"mkdir -p {str(OUTPUT_PATH / today)}")
 
+    title = title.replace("/", " ")
+
     new_video_file = OUTPUT_PATH / f"{today}" / f"{title}.mp4"
 
     os.system(f'mv {str(video_path)} "{new_video_file}"')

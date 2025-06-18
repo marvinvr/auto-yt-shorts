@@ -97,8 +97,8 @@ def generate_video(
     generator = lambda txt: TextClip(
         txt,
         font=f"fonts/bold_font.ttf",
-        fontsize=100,
-        color="#FFFF00",
+        fontsize=112,
+        color="#FFFFFF",
         stroke_color="black",
         stroke_width=5,
     )

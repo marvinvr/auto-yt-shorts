@@ -1,11 +1,10 @@
 import logging
-from concurrent.futures import ThreadPoolExecutor, as_completed
-from multiprocessing import cpu_count
 
-import uvicorn
-from fastapi import FastAPI
+from apscheduler.schedulers.blocking import BlockingScheduler
+from apscheduler.triggers.cron import CronTrigger
 from tqdm import tqdm
 
+from config import CRON_SCHEDULE, RUN_ONCE, VIDEO_COUNT
 from utils.audio import generate_voiceover
 from utils.llm import (
     get_description,
@@ -16,11 +15,10 @@ from utils.llm import (
     get_topic,
 )
 from utils.metadata import save_metadata
+from utils.notifications import send_error_notification, send_success_notification
 from utils.stock_videos import get_stock_videos
 from utils.video import generate_subtitles, generate_video
-from utils.yt import auto_upload, prep_for_manual_upload
-
-app = FastAPI()
+from utils.yt import auto_upload
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -54,47 +52,103 @@ def generate_video_data(title):
     return title, description, script, search_terms, stock_videos, voiceover, subtitles
 
 
-@app.post("/generate_videos/")
 def generate_videos(n: int = 4) -> None:
-    topic = get_topic()
+    try:
+        topic = get_topic()
 
-    logger.info("[Generated Topic]")
-    logger.info(topic)
+        logger.info("[Generated Topic]")
+        logger.info(topic)
 
-    possible_titles = get_titles(topic)
-    logger.info("[Generated Possible Titles]")
-    logger.info(possible_titles)
+        possible_titles = get_titles(topic)
+        logger.info("[Generated Possible Titles]")
+        logger.info(possible_titles)
 
-    titles = get_most_engaging_titles(possible_titles, n)
+        titles = get_most_engaging_titles(possible_titles, n)
 
-    # Use ThreadPoolExecutor to execute the network-bound tasks in parallel
-    with ThreadPoolExecutor(max_workers=min(cpu_count(), len(titles))) as executor:
-        # Submit all tasks to the executor
-        future_to_title = {
-            executor.submit(generate_video_data, title): title for title in titles
-        }
+        videos_generated = 0
+        for title in tqdm(titles, desc="Generating videos"):
+            try:
+                (
+                    title,
+                    description,
+                    script,
+                    search_terms,
+                    stock_videos,
+                    voiceover,
+                    subtitles,
+                ) = generate_video_data(title)
 
-    for future in tqdm(as_completed(future_to_title), total=len(titles)):
-        title, description, script, search_terms, stock_videos, voiceover, subtitles = (
-            future.result()
-        )
+                logging.debug(f"Title: {title}")
+                logging.debug(f"Description: {description}")
+                logging.debug(f"Script: {script}")
+                logging.debug(f"Search terms: {search_terms}")
+                logging.debug(f"Stock videos: {stock_videos}")
+                logging.debug(f"Voiceover: {voiceover}")
+                logging.debug(f"Subtitles: {subtitles}")
 
-        video = generate_video(stock_videos, voiceover, subtitles)
-        logger.info("[Generated Video]")
+                video = generate_video(stock_videos, voiceover, subtitles)
+                logger.info("[Generated Video]")
 
-        new_video_file = save_metadata(
-            title, description, None, script, search_terms, video
-        )
-        logger.info("[Saved Video]")
+                new_video_file = save_metadata(
+                    title, description, None, script, search_terms, video
+                )
+                logger.info("[Saved Video]")
 
-        auto_upload(new_video_file, title, description)
-        logger.info("[Uploaded Video]")
+                auto_upload(new_video_file, title, description)
+                logger.info("[Uploaded Video]")
+                videos_generated += 1
+
+            except Exception as e:
+                error_msg = f"Failed to generate/upload video '{title}'"
+                logger.error(f"{error_msg}: {e}")
+                send_error_notification(error_msg, e, "Video Generation")
+
+        if videos_generated > 0:
+            success_msg = (
+                f"Successfully generated and uploaded {videos_generated} video(s)"
+            )
+            logger.info(success_msg)
+            send_success_notification(success_msg, "Video Generation")
+        else:
+            error_msg = "No videos were successfully generated"
+            logger.error(error_msg)
+            send_error_notification(error_msg, context="Video Generation")
+
+    except Exception as e:
+        error_msg = "Failed to start video generation process"
+        logger.error(f"{error_msg}: {e}")
+        send_error_notification(error_msg, e, "Video Generation")
 
 
-@app.get("/health/")
-def health():
-    return {"status": "ok"}
+def main():
+    cron_schedule = CRON_SCHEDULE
+    run_once = RUN_ONCE
+    video_count = VIDEO_COUNT
+
+    if run_once:
+        logger.info("RUN_ONCE is enabled, generating videos immediately...")
+        generate_videos(video_count)
+        logger.info("Video generation completed. Exiting.")
+        return
+
+    logger.info(f"Starting scheduler with cron schedule: {cron_schedule}")
+    scheduler = BlockingScheduler()
+
+    trigger = CronTrigger.from_crontab(cron_schedule)
+    scheduler.add_job(
+        func=generate_videos, trigger=trigger, args=[video_count], id="video_generation"
+    )
+
+    try:
+        scheduler.start()
+    except KeyboardInterrupt:
+        logger.info("Received interrupt signal, shutting down...")
+        scheduler.shutdown()
+    except Exception as e:
+        error_msg = "Scheduler failed unexpectedly"
+        logger.error(f"{error_msg}: {e}")
+        send_error_notification(error_msg, e, "Scheduler")
 
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    main()

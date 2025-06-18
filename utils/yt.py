@@ -1,6 +1,9 @@
 import os
+import shlex
 from datetime import datetime
 from pathlib import Path
+
+from config import NO_UPLOAD
 
 
 def auto_upload(
@@ -10,8 +13,11 @@ def auto_upload(
     privacy: str = "public",
     category: str = "24",
 ) -> None:
+    if NO_UPLOAD:
+        return
+
     os.system(
-        f'/venv/bin/python3 upload_video.py --file="{str(video)}" --title="{title}" --description="{description}" --privacyStatus="{privacy}" --category="{category}"'
+        f"/venv/bin/python3 upload_video.py --file={shlex.quote(str(video))} --title={shlex.quote(title)} --description={shlex.quote(description)} --privacyStatus={shlex.quote(privacy)} --category={shlex.quote(category)}"
     )
 
 
@@ -32,12 +38,12 @@ def prep_for_manual_upload(
     new_video_file = Path("youtube") / f"{today}" / f"{title}.mp4"
     if not new_video_file.exists():
         # copy it
-        os.system(f'cp {str(file)} "{new_video_file}"')
+        os.system(f"cp {shlex.quote(str(file))} {shlex.quote(str(new_video_file))}")
 
         # create a txt file with the description
         with open(new_video_file.with_suffix(".txt"), "w") as f:
             f.write(description)
 
         print("[Prepped for Manual Upload]")
-        print(new_video_file)
-        print(new_video_file.with_suffix(".txt"))
+        print({new_video_file})
+        print({new_video_file.with_suffix(".txt")})

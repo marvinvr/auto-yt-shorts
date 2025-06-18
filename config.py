@@ -31,10 +31,11 @@ if not OPENAI_API_KEY:
     raise ValueError("OPENAI_API_KEY_AUTO_YT_SHORTS not set")
 
 
-OPENAI_MODEL = "gpt-4-turbo-preview"  # "gpt-3.5-turbo-0125"
+OPENAI_BASE_URL = os.environ.get("OPENAI_BASE_URL")
 
-MIN_SEARCH_TERMS = 3
-MAX_SEARCH_TERMS = 5
+OPENAI_MODEL = os.environ.get("OPENAI_MODEL", "gpt-4.1")
+
+GEMINI_TTS_MODEL = os.environ.get("GEMINI_TTS_MODEL", "gemini-2.5-flash-preview-tts")
 
 PEXELS_API_KEY = os.environ.get("PEXELS_API_KEY")
 
@@ -53,3 +54,18 @@ os.makedirs(OUTPUT_PATH, exist_ok=True)
 BACKGROUND_SONGS_PATH = Path("music")
 
 SECONDARY_CONTENT_PATH = Path("secondary_video")
+
+CRON_SCHEDULE = os.environ.get("CRON_SCHEDULE", "31 4 * * *")
+
+RUN_ONCE = os.environ.get("RUN_ONCE", "false").lower() == "true"
+
+VIDEO_COUNT = int(os.environ.get("VIDEO_COUNT", "1"))
+
+APPRISE_URL = os.environ.get("APPRISE_URL")
+
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
+
+if not GEMINI_API_KEY:
+    raise ValueError("GEMINI_API_KEY not set")
+
+NO_UPLOAD = os.environ.get("NO_UPLOAD", "false").lower() == "true"

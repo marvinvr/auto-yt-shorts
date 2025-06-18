@@ -1,13 +1,16 @@
-version: "3.8"
 services:
   auto-yt-shorts:
     container_name: auto-yt-shorts
     build: .
     volumes:
-      - ./youtube:/app/youtube
+      - ./output:/app/output
       - ./secondary_video:/app/secondary_video
       - ./music:/app/music
+      - ./credentials:/app/credentials
     env_file:
       - .env
+    environment:
+      - RUN_ONCE=true
+      - VIDEO_COUNT=1
     ports:
       - "8000:8000"
