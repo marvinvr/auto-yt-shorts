@@ -171,10 +171,16 @@ The YouTube channel below showcases the auto-yt-shorts project in action, a few 
 >
 > 6. Setup and Authenticate with YouTube using the OAuth 2.0 flow:
 >
-> Follow the instructions in the [YouTube Data API documentation](https://developers.google.com/youtube/v3/quickstart/python) to create a project and obtain OAuth 2.0 credentials.
+> Follow the instructions in the [YouTube Data API documentation](https://developers.google.com/youtube/v3/quickstart/python) to create a project and obtain OAuth 2.0 credentials. Place your `client_secrets.json` file in the `./credentials` directory.
 >
+> Initial authentication (run once):
 > ```console
 > $ python upload_video.py
+> ```
+>
+> To update/refresh credentials later:
+> ```console
+> $ python update_tokens.py
 > ```
 >
 > 7. Install the dependencies:
@@ -187,10 +193,25 @@ The YouTube channel below showcases the auto-yt-shorts project in action, a few 
 
 <h4>From <code>source</code></h4>
 
-> Run auto-yt-shorts using the command below:
+> Run auto-yt-shorts using one of the following methods:
 >
+> **One-time execution:**
 > ```console
-> $ python main.py
+> $ RUN_ONCE=true python main.py
+> ```
+>
+> **Scheduled execution with cron:**
+> ```console
+> $ CRON_SCHEDULE="0 */6 * * *" python main.py
+> ```
+>
+> **Or set environment variables in your `.env` file:**
+> ```bash
+> # For one-time execution
+> RUN_ONCE=true
+> 
+> # Or for scheduled execution (runs every 6 hours in this example)
+> CRON_SCHEDULE=0 */6 * * *
 > ```
 
 ### With Docker
@@ -202,6 +223,8 @@ The YouTube channel below showcases the auto-yt-shorts project in action, a few 
 > ```
 >
 > The application will be accessible at `http://localhost:8000`. You can send a POST request to the `/generate_videos` endpoint with the required parameters to generate a video.
+>
+> **Note:** The Docker setup uses the same environment variables (`RUN_ONCE` and `CRON_SCHEDULE`) and credentials directory (`./credentials`) as the local installation.
 
 ---
 
