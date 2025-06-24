@@ -61,9 +61,13 @@ def send_success_notification(message: str, context: str = ""):
         context: Optional context information
     """
     try:
-        from config import APPRISE_URL
+        from config import APPRISE_URL, NOTIFY_ON_SUCCESS
         
         if not APPRISE_URL:
+            return
+            
+        if not NOTIFY_ON_SUCCESS:
+            logger.info(f"Success notification skipped (NOTIFY_ON_SUCCESS=False): {message}")
             return
             
         # Create Apprise instance

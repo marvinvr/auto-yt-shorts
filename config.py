@@ -69,3 +69,5 @@ if not GEMINI_API_KEY:
     raise ValueError("GEMINI_API_KEY not set")
 
 NO_UPLOAD = os.environ.get("NO_UPLOAD", "false").lower() == "true"
+
+NOTIFY_ON_SUCCESS = os.environ.get("NOTIFY_ON_SUCCESS", "false").lower() == "true"
