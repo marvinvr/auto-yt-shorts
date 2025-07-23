@@ -8,6 +8,9 @@ scipy==1.12.0
 opencv-python==4.9.0.80
 assemblyai==0.20.2
 srt_equalizer==0.1.8
+whisperx==3.1.1
+torch
+torchaudio
 tqdm==4.66.1
 apscheduler==3.10.4
 apprise==1.7.1

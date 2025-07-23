@@ -17,7 +17,7 @@ from utils.llm import (
 from utils.metadata import save_metadata
 from utils.notifications import send_error_notification, send_success_notification
 from utils.stock_videos import get_stock_videos
-from utils.video import generate_subtitles, generate_video
+from utils.video import generate_video
 from utils.yt import auto_upload
 
 logging.basicConfig(level=logging.INFO)
@@ -46,10 +46,7 @@ def generate_video_data(title):
     voiceover = generate_voiceover(script)
     logger.info("[Generated Voiceover]")
 
-    subtitles = generate_subtitles(voiceover)
-    logger.info("[Generated Subtitles]")
-
-    return title, description, script, search_terms, stock_videos, voiceover, subtitles
+    return title, description, script, search_terms, stock_videos, voiceover
 
 
 def generate_videos(n: int = 4) -> None:
@@ -75,7 +72,6 @@ def generate_videos(n: int = 4) -> None:
                     search_terms,
                     stock_videos,
                     voiceover,
-                    subtitles,
                 ) = generate_video_data(title)
 
                 logging.debug(f"Title: {title}")
@@ -84,9 +80,8 @@ def generate_videos(n: int = 4) -> None:
                 logging.debug(f"Search terms: {search_terms}")
                 logging.debug(f"Stock videos: {stock_videos}")
                 logging.debug(f"Voiceover: {voiceover}")
-                logging.debug(f"Subtitles: {subtitles}")
 
-                video = generate_video(stock_videos, voiceover, subtitles)
+                video = generate_video(stock_videos, voiceover)
                 logger.info("[Generated Video]")
 
                 new_video_file = save_metadata(

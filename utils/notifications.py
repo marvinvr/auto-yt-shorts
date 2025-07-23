@@ -20,6 +20,8 @@ def send_error_notification(error_message: str, exception: Exception = None, con
         
         if not APPRISE_URL:
             logger.warning("APPRISE_URL not configured, skipping error notification")
+            logger.error(error_message)
+            logger.exception(exception)
             return
             
         # Create Apprise instance

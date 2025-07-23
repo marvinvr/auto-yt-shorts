@@ -12,5 +12,4 @@ services:
     environment:
       - RUN_ONCE=true
       - VIDEO_COUNT=1
-    ports:
-      - "8000:8000"
+      - NO_UPLOAD=true
