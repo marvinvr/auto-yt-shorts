@@ -16,13 +16,13 @@ def save_binary_file(file_path: Path, data: bytes):
         f.write(data)
 
 
-def convert_to_wav(audio_data: bytes, mime_type: str, speed: float = 1.1) -> bytes:
+def convert_to_wav(audio_data: bytes, mime_type: str, speed: float = 1.15) -> bytes:
     """Converts audio data to WAV format with proper header and adjusts playback speed.
 
     Args:
         audio_data: The raw audio data as a bytes object.
         mime_type: Mime type of the audio data.
-        speed: Speed multiplier for playback (e.g., 1.1 for 1.1x speed).
+        speed: Speed multiplier for playback (e.g., 1.05 for 1.05x speed).
 
     Returns:
         A bytes object representing the WAV file.

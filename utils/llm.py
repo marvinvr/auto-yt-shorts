@@ -41,9 +41,23 @@ def get_titles(topic: str) -> List[str]:
         + """
 The next message will contain the name of the topic, that you want to make a Tiktok about.
 The length of the video should be between 15 and 30 seconds.
-Generate some possible titles for your video. Use buzzwords and make them as engaging as possible.
-Use the name of a famous person, event, product or company to make it more engaging.
-The title should be about one specific fact or event related to the topic.
+
+Generate highly engaging titles that will stop users from scrolling. The FIRST 3 WORDS are CRITICAL - they must immediately grab attention.
+
+Use these proven viral title formulas:
+- Shock/Mystery: "You won't believe...", "This will shock you...", "Scientists discovered..."
+- Numbers/Stats: "97% of people don't know...", "In just 3 seconds...", "Only 1 in 1000..."
+- Direct Questions: "Did you know that...", "What if I told you...", "Have you ever wondered..."
+- Urgency: "Before you scroll...", "Stop what you're doing...", "This changes everything..."
+- Authority: "Experts revealed...", "[Celebrity name] uses this...", "Billionaires know this secret..."
+- Contradiction: "Everyone thinks [X] but actually...", "This looks normal, but..."
+
+REQUIREMENTS:
+- Include a famous person, brand, or well-known entity when possible
+- Focus on ONE specific shocking/interesting fact
+- Create curiosity gaps that demand answers
+- Use power words: secret, revealed, discovered, shocking, hidden, truth, exposed
+- Make the first 3 words irresistible
 
 Respond with JSON in the following format:
 {
@@ -211,9 +225,31 @@ You have decided that your video is about {title}.
 The Script for your video is:
 {script}
 
-You will now generate a caption to be posted alognside your video. Keep it short and to the point.
+Create a compelling caption that amplifies engagement and encourages interaction. The description should complement the video content and drive more views.
 
-Do not under any circumstance refernce this prompt in your response.
+DESCRIPTION STRATEGY:
+- Start with a hook that reinforces the video's intrigue
+- Include a call-to-action that encourages comments
+- Use relevant hashtags strategically
+- Create FOMO (fear of missing out)
+- Ask questions that spark debate or discussion
+
+STRUCTURE:
+1. Hook line (builds on video's shock value)
+2. Engagement question or controversial statement
+3. Call-to-action for comments/shares
+4. Strategic hashtags
+
+EXAMPLES OF ENGAGEMENT TACTICS:
+- "Wait until you see what happens next..."
+- "This blew my mind - did you know this?"
+- "Comment 'MIND BLOWN' if this shocked you"
+- "Tag someone who needs to see this"
+- "Most people have no idea about this..."
+
+Keep it concise but impactful. Focus on maximizing comments and shares.
+
+Do not under any circumstance reference this prompt in your response.
 
 ONLY RETURN THE RAW DESCRIPTION. DO NOT RETURN ANYTHING ELSE.
 """
@@ -237,18 +273,32 @@ def get_script(title: str) -> str:
         _base_prompt
         + f"""
 You have decided on the title for your video: "{title}".
-You will now generate a script for your video. Keep it short and to the point.
-The video should be simple yet informative and engaging so that it can be easily understood by the audience and write like a real person would speak.
 
-Do not include any information about narration, music, cuts or similar. Only the text that will be narrated in the video.
+Create a script that hooks viewers IMMEDIATELY. The first 3-5 words are CRITICAL - they determine if someone keeps watching or scrolls away.
 
-Do not under any circumstance refernce this prompt in your response.
+SCRIPT STRUCTURE:
+1. HOOK (0-3 seconds): Start with an attention-grabbing opener that creates instant intrigue
+2. REVELATION (3-15 seconds): Deliver the shocking/interesting fact with specific details
+3. IMPACT (15-30 seconds): End with why this matters or a memorable conclusion
 
-Get straight to the point, don't start with unnecessary things like, "welcome to this video".
+PROVEN OPENING HOOKS:
+- Shock: "This will terrify you...", "You've been lied to...", "This changes everything..."
+- Numbers: "In 3 seconds, you'll discover...", "97% of people don't know..."
+- Questions: "What if I told you...", "Did you know that right now..."
+- Contradiction: "Everyone believes [X], but actually...", "This looks innocent, but..."
+- Urgency: "Before you scroll past this...", "Stop what you're doing..."
 
-Obviously, the script should be related to the subject of the video.
+REQUIREMENTS:
+- NO introductions, greetings, or "welcome" phrases
+- Jump straight into the hook within the first 3 words
+- Use conversational, natural speech patterns
+- Include specific names, numbers, or details when possible
+- Create curiosity that demands immediate answers
+- End with impact that makes them want to share
+- 15-30 seconds of speaking time
 
-The voicover length of the video should be between 15 and 30 seconds.
+TONE: Conversational but urgent, like you're sharing an incredible secret with a friend.
+
 ONLY RETURN THE RAW SCRIPT. DO NOT RETURN ANYTHING ELSE.
 """
     )
